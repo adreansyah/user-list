@@ -8,10 +8,11 @@ import Paper from '@mui/material/Paper';
 import { FC, useState } from 'react';
 import ArrowUpward from '@mui/icons-material/ArrowUpward';
 import ArrowDownward from '@mui/icons-material/ArrowDownward';
-import { Button } from '@mui/material';
+import { Button, CircularProgress } from '@mui/material';
 
 interface PROPSTABLES {
     fieldcColumn: Array<any>,
+    loading: boolean,
     defaultSort: string,
     rowData: Array<any>,
     callSorted: ({ Sorted, isType }: { Sorted: string, isType: string }) => void
@@ -19,6 +20,7 @@ interface PROPSTABLES {
 
 const TableGenerator: FC<PROPSTABLES> = ({
     fieldcColumn,
+    loading,
     defaultSort,
     rowData,
     callSorted
@@ -32,6 +34,7 @@ const TableGenerator: FC<PROPSTABLES> = ({
         })
         callSorted({ Sorted: sorted, isType: isSort[sorted] ? "desc" : 'asc' })
     }
+    // console.log(defaultSort);
     return (
         <TableContainer component={Paper}>
             <Table sx={{ minWidth: 650 }} aria-label="simple table">
@@ -61,26 +64,31 @@ const TableGenerator: FC<PROPSTABLES> = ({
                     </TableRow>
                 </TableHead>
                 <TableBody>
-                    {rowData.map((row, idx) => {
-                        return (
-                            <TableRow
-                                key={idx}
-                                sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                            >
-                                <TableCell component="th" scope="row">
-                                    {idx + 1}
-                                </TableCell>
-                                {
-                                    fieldcColumn.map((items, index) => (
-                                        <TableCell key={index} component="th" scope="row">
-                                            {row[items.rowName]}
-                                        </TableCell>
-                                    ))
-                                }
 
-                            </TableRow>
-                        )
-                    })}
+                    {
+                        loading ? <TableRow>
+                            <TableCell align='center' colSpan={fieldcColumn.length + 1}><CircularProgress /></TableCell>
+                        </TableRow> :
+                            rowData.map((row, idx) => {
+                                return (
+                                    <TableRow
+                                        key={idx}
+                                        sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                                    >
+                                        <TableCell component="th" scope="row">
+                                            {idx + 1}
+                                        </TableCell>
+                                        {
+                                            fieldcColumn.map((items, index) => (
+                                                <TableCell key={index} component="th" scope="row">
+                                                    {row[items.rowName]}
+                                                </TableCell>
+                                            ))
+                                        }
+
+                                    </TableRow>
+                                )
+                            })}
                 </TableBody>
             </Table>
         </TableContainer>

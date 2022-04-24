@@ -9,6 +9,7 @@ import { Box } from "@mui/system";
 import { Button, FormControl, InputLabel, MenuItem, Select, SelectChangeEvent, TextField } from "@mui/material";
 import Search from '@mui/icons-material/Search';
 import { debounce } from "helper";
+import HeaderBar from "component/header";
 
 const options: Array<{ label: string, value: string }> = [{
   label: "Male",
@@ -20,10 +21,10 @@ const options: Array<{ label: string, value: string }> = [{
 
 const App = () => {
   const defaultSize: number = 10
-  const defaultRows: number = 30
+  const defaultRows: number = 100
 
   const [previllageData, setPrevillageData] = useState({
-    sort: "asc",
+    sort: "username",
     page: 1,
     search: "",
     filter: "",
@@ -96,86 +97,107 @@ const App = () => {
     const value = isRow.results.filter((item: any) => item.username === keyword.trim() || item.email === keyword.trim());
     if (keyword === "") {
       dispatch(requestUserListing({ isParams: { results: defaultRows, gender: "*" } }))
-      setPrevillageData(prev => ({
-        ...prev,
-        page: 1,
-      }))
+
     }
     else {
       dispatch(requestUserAction({ data: value }))
     }
   }
+  const handleResetFilter = () => {
+    setPrevillageData((prev: any) => ({
+      ...prev,
+      sort: "username",
+      page: 1,
+      search: "",
+      filter: "",
+      data: []
+    }))
+    dispatch(requestUserListing({ isParams: { results: defaultRows, gender: "*" } }))
+  }
   const debouncedHandler = debounce(handleSearch, 1000);
+  // console.log(previllageData.search)
   return (
-    <div className="centered-container">
-      <Box
-        display="flex"
-        sx={{
-          width: 800,
-          maxWidth: '100%',
-          paddingBottom: 2
-        }}
-      >
-        <TextField
-          onChange={(e) => debouncedHandler({ keyword: e.target.value })}
-          size="medium"
-          fullWidth
-          label="Search name or email"
-          id="fullWidth"
-          autoComplete="off"
-          InputProps={{ endAdornment: <Search /> }}
+    <>
+      <HeaderBar />
+      <div className="centered-container">
+        <Box
+          display="flex"
+          sx={{
+            width: 800,
+            maxWidth: '100%',
+            paddingBottom: 2
+          }}
+        >
+          <TextField
+            onChange={(e) => {
+              debouncedHandler({ keyword: e.target.value })
+              setPrevillageData(prev => ({
+                ...prev,
+                search: e.target.value
+              }))
+            }}
+            size="medium"
+            fullWidth
+            label="Search name or email"
+            id="fullWidth"
+            autoComplete="off"
+            InputProps={{ endAdornment: <Search /> }}
+            value={previllageData.search}
+          // defaultValue={previllageData.search}
+          />
+          <FormControl fullWidth sx={{ marginLeft: 2 }}>
+            <InputLabel id="demo-simple-select-label">Gender</InputLabel>
+            <Select
+              labelId="demo-simple-select-label"
+              id="demo-simple-select"
+              value={previllageData.filter}
+              label="Gender"
+              onChange={(event: SelectChangeEvent) => handleFilter({ filtered: event.target.value as string })}
+            >
+              {
+                options.map((item, idx) => (
+                  <MenuItem key={idx} value={item.value}>{item.label}</MenuItem>
+                ))
+              }
+            </Select>
+          </FormControl>
+          <Button onClick={handleResetFilter} fullWidth sx={{ marginLeft: 2 }} type="button" variant="contained" color="info">Reset</Button>
+        </Box>
+        <TableGenerator
+          defaultSort={previllageData.sort}
+          loading={isRow.loading}
+          fieldcColumn={[{
+            fieldName: "Username",
+            rowName: "username",
+            align: "left"
+          }, {
+            fieldName: "Name",
+            rowName: "name",
+            align: "left"
+          }, {
+            fieldName: "Email",
+            rowName: "email",
+            align: "left"
+          }, {
+            fieldName: "Gender",
+            rowName: "gender",
+            align: "left"
+          }, {
+            fieldName: "Registered Date",
+            rowName: "registered",
+            align: "left"
+          }]}
+          rowData={previllageData.data}
+          callSorted={handleSort}
         />
-        <FormControl fullWidth sx={{ marginLeft: 2 }}>
-          <InputLabel id="demo-simple-select-label">Gender</InputLabel>
-          <Select
-            labelId="demo-simple-select-label"
-            id="demo-simple-select"
-            value={previllageData.filter}
-            label="Gender"
-            onChange={(event: SelectChangeEvent) => handleFilter({ filtered: event.target.value as string })}
-          >
-            {
-              options.map((item, idx) => (
-                <MenuItem key={idx} value={item.value}>{item.label}</MenuItem>
-              ))
-            }
-          </Select>
-        </FormControl>
-        <Button fullWidth sx={{ marginLeft: 2 }} type="button" variant="contained" color="info">Reset</Button>
-      </Box>
-      <TableGenerator
-        defaultSort="username"
-        fieldcColumn={[{
-          fieldName: "Username",
-          rowName: "username",
-          align: "left"
-        }, {
-          fieldName: "Name",
-          rowName: "name",
-          align: "left"
-        }, {
-          fieldName: "Email",
-          rowName: "email",
-          align: "left"
-        }, {
-          fieldName: "Gender",
-          rowName: "gender",
-          align: "left"
-        }, {
-          fieldName: "Registered Date",
-          rowName: "registered",
-          align: "left"
-        }]}
-        rowData={previllageData.data}
-        callSorted={handleSort}
-      />
-      <Stack display={"flex"} alignItems="flex-end" spacing={2} sx={{ marginTop: 2 }}>
-        <Pagination
-          page={previllageData.page}
-          onChange={(event, page) => handlePagination(event, page)}
-          count={totalPagesPagination} variant="outlined" color="secondary" shape="rounded" />
-      </Stack>
-    </div>
+        <Stack display={"flex"} alignItems="flex-end" spacing={2} sx={{ marginTop: 2 }}>
+          <Pagination
+            page={previllageData.page}
+            onChange={(event, page) => handlePagination(event, page)}
+            count={totalPagesPagination} variant="outlined" color="secondary" shape="rounded" />
+        </Stack>
+      </div>
+    </>
   );
 }
 
