@@ -22,6 +22,8 @@ test('renders title link Name from Header', () => {
 
 test('test MyComponent', () => {
   render(<TableGenerator
+    defaultSize={100}
+    page={1}
     fieldcColumn={[]}
     loading={false}
     defaultSort={"any"}

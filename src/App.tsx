@@ -11,13 +11,13 @@ import Search from '@mui/icons-material/Search';
 import { debounce } from "helper";
 import HeaderBar from "component/header";
 
-const options: Array<{ label: string, value: string }> = [{
-  label: "Male",
-  value: "male"
-}, {
-  label: "Female",
-  value: "female"
-}]
+// const options: Array<{ label: string, value: string }> = [{
+//   label: "Male",
+//   value: "male"
+// }, {
+//   label: "Female",
+//   value: "female"
+// }]
 
 const App = () => {
   const defaultSize: number = 10
@@ -97,10 +97,19 @@ const App = () => {
     const value = isRow.results.filter((item: any) => item.username === keyword.trim() || item.email === keyword.trim());
     if (keyword === "") {
       dispatch(requestUserListing({ isParams: { results: defaultRows, gender: "*" } }))
-
+      setPrevillageData((prev: any) => ({
+        ...prev,
+        page: 1,
+        search: keyword,
+      }))
     }
     else {
       dispatch(requestUserAction({ data: value }))
+      setPrevillageData((prev: any) => ({
+        ...prev,
+        page: 1,
+        search: keyword,
+      }))
     }
   }
   const handleResetFilter = () => {
@@ -115,7 +124,6 @@ const App = () => {
     dispatch(requestUserListing({ isParams: { results: defaultRows, gender: "*" } }))
   }
   const debouncedHandler = debounce(handleSearch, 1000);
-  // console.log(previllageData.search)
   return (
     <>
       <HeaderBar />
@@ -155,7 +163,7 @@ const App = () => {
               onChange={(event: SelectChangeEvent) => handleFilter({ filtered: event.target.value as string })}
             >
               {
-                options.map((item, idx) => (
+                isRow.options.map((item: { value: string, label: string }, idx: number) => (
                   <MenuItem key={idx} value={item.value}>{item.label}</MenuItem>
                 ))
               }
@@ -164,6 +172,8 @@ const App = () => {
           <Button onClick={handleResetFilter} fullWidth sx={{ marginLeft: 2 }} type="button" variant="contained" color="info">Reset</Button>
         </Box>
         <TableGenerator
+          defaultSize={defaultSize}
+          page={previllageData.page}
           defaultSort={previllageData.sort}
           loading={isRow.loading}
           fieldcColumn={[{

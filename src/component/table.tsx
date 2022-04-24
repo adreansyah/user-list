@@ -12,6 +12,8 @@ import { Button, CircularProgress } from '@mui/material';
 
 interface PROPSTABLES {
     fieldcColumn: Array<any>,
+    defaultSize: number,
+    page: number,
     loading: boolean,
     defaultSort: string,
     rowData: Array<any>,
@@ -21,6 +23,8 @@ interface PROPSTABLES {
 const TableGenerator: FC<PROPSTABLES> = ({
     fieldcColumn,
     loading,
+    defaultSize,
+    page,
     defaultSort,
     rowData,
     callSorted
@@ -39,7 +43,7 @@ const TableGenerator: FC<PROPSTABLES> = ({
         <TableContainer component={Paper} >
             <Table sx={{ minWidth: 650 }} aria-label="simple table">
                 <TableHead>
-                    <TableRow  data-testid="render-allTable">
+                    <TableRow data-testid="render-allTable">
                         <TableCell sx={{ fontWeight: "bold" }} >No.</TableCell>
                         {
                             fieldcColumn.map((item, idx) => {
@@ -76,7 +80,7 @@ const TableGenerator: FC<PROPSTABLES> = ({
                                         sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                                     >
                                         <TableCell component="th" scope="row">
-                                            {idx + 1}
+                                            {(((page - 1) * defaultSize) + idx + 1)}
                                         </TableCell>
                                         {
                                             fieldcColumn.map((items, index) => (
