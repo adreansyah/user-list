@@ -1,6 +1,6 @@
 # _User Random Listing._
 
-You can now open https://62650ffcdfdc5871343e900f--profound-cuchufli-4497bf.netlify.app/
+You can now open https://profound-cuchufli-4497bf.netlify.app/
 
 
 This project created by requirement the following :
