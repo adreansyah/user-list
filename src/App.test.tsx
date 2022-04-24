@@ -7,7 +7,7 @@ import { ThemeProvider } from '@emotion/react';
 import { CssBaseline } from '@mui/material';
 
 
-test('renders learn react link', () => {
+test('renders title link Name from Header', () => {
   render(
     <Provider store={store}>
       <ThemeProvider theme={theme}>
