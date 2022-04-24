@@ -5,7 +5,7 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-import { FC, useState } from 'react';
+import { FC, memo, useState } from 'react';
 import ArrowUpward from '@mui/icons-material/ArrowUpward';
 import ArrowDownward from '@mui/icons-material/ArrowDownward';
 import { Button, CircularProgress } from '@mui/material';
@@ -20,7 +20,7 @@ interface PROPSTABLES {
     callSorted: ({ Sorted, isType }: { Sorted: string, isType: string }) => void
 }
 
-const TableGenerator: FC<PROPSTABLES> = ({
+const DataTable: FC<PROPSTABLES> = ({
     fieldcColumn,
     loading,
     defaultSize,
@@ -38,7 +38,6 @@ const TableGenerator: FC<PROPSTABLES> = ({
         })
         callSorted({ Sorted: sorted, isType: isSort[sorted] ? "desc" : 'asc' })
     }
-    // console.log(defaultSort);
     return (
         <TableContainer component={Paper} >
             <Table sx={{ minWidth: 650 }} aria-label="simple table">
@@ -98,4 +97,11 @@ const TableGenerator: FC<PROPSTABLES> = ({
         </TableContainer>
     );
 }
+const TableGenerator = memo(DataTable, (prevProps, nextProps) => {
+    if (JSON.stringify(prevProps) === JSON.stringify(nextProps)) {
+        return true;
+    }
+    return false;
+});
+
 export default TableGenerator

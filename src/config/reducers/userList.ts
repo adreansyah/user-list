@@ -22,7 +22,7 @@ const initialState: INITIALSTATE = {
         value: "female"
     }]
 }
-const userList = (state = initialState, action: any) => {
+const userList = (state = initialState, action: any): INITIALSTATE => {
     switch (action.type) {
         case 'REQUEST_USERS':
             return {

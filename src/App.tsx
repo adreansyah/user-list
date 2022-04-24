@@ -11,14 +11,6 @@ import Search from '@mui/icons-material/Search';
 import { debounce } from "helper";
 import HeaderBar from "component/header";
 
-// const options: Array<{ label: string, value: string }> = [{
-//   label: "Male",
-//   value: "male"
-// }, {
-//   label: "Female",
-//   value: "female"
-// }]
-
 const App = () => {
   const defaultSize: number = 10
   const defaultRows: number = 100
@@ -80,7 +72,6 @@ const App = () => {
     }))
     dispatch(requestUserAction({ data: arr }))
   }
-
   const handlePagination = (event: any, page: number) => {
     let arr: any = []
     for (let i: number = 0; i < defaultSize; i++) {
@@ -100,7 +91,6 @@ const App = () => {
       setPrevillageData((prev: any) => ({
         ...prev,
         page: 1,
-        search: keyword,
       }))
     }
     else {
@@ -108,7 +98,6 @@ const App = () => {
       setPrevillageData((prev: any) => ({
         ...prev,
         page: 1,
-        search: keyword,
       }))
     }
   }
@@ -139,7 +128,7 @@ const App = () => {
           <TextField
             onChange={(e) => {
               debouncedHandler({ keyword: e.target.value })
-              setPrevillageData(prev => ({
+              setPrevillageData((prev: any) => ({
                 ...prev,
                 search: e.target.value
               }))
@@ -151,7 +140,6 @@ const App = () => {
             autoComplete="off"
             InputProps={{ endAdornment: <Search /> }}
             value={previllageData.search}
-          // defaultValue={previllageData.search}
           />
           <FormControl fullWidth sx={{ marginLeft: 2 }}>
             <InputLabel id="demo-simple-select-label">Gender</InputLabel>
@@ -210,5 +198,6 @@ const App = () => {
     </>
   );
 }
+
 
 export default App;
