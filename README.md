@@ -87,7 +87,15 @@ $ sudo yarn start
 ```sh
 $ cd user-list/
 $ sudo npm install
-$ sudo npm runstart
+$ sudo npm start
+```
+
+2. Start Testing npm
+
+```sh
+$ cd user-list/
+
+$ sudo npm run test
 ```
 
 [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg?style=flat-square)](https://github.com/adreansyah/user-list)
