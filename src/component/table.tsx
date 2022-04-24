@@ -36,10 +36,10 @@ const TableGenerator: FC<PROPSTABLES> = ({
     }
     // console.log(defaultSort);
     return (
-        <TableContainer component={Paper}>
+        <TableContainer component={Paper} >
             <Table sx={{ minWidth: 650 }} aria-label="simple table">
                 <TableHead>
-                    <TableRow>
+                    <TableRow  data-testid="render-allTable">
                         <TableCell sx={{ fontWeight: "bold" }} >No.</TableCell>
                         {
                             fieldcColumn.map((item, idx) => {
